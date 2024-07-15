@@ -53,4 +53,11 @@ char **shell_split(char *buffer);
  */
 int32_t shell_exec(char **args);
 
+/**
+ * @brief Set current directory.
+ * 
+ * @param [in] path - given current directory to set. 
+ */
+void shell_set_cwd(char *path);
+
 #endif /* _SHELL_H_ */
