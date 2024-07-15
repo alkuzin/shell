@@ -16,9 +16,6 @@
  * <https://www.gnu.org/licenses/>.
  */
 
-#include <shell/shell.h>
-#include <shell/utils.h>
-
 #include <sys/wait.h>
 #include <unistd.h>
 #include <limits.h>
@@ -27,9 +24,13 @@
 #include <stdio.h>
 #include <pwd.h>
 
+#include <shell/builtins.h>
+#include <shell/shell.h>
+#include <shell/utils.h>
 
 static char shell_prompt[SHELL_PROMPT_BUFSIZE];
 static char shell_cwd[PATH_MAX];
+
 
 static void shell_set_prompt(void)
 {
@@ -138,17 +139,23 @@ int32_t shell_exec(char **args)
     pid_t   pid, wpid;
 
     pid = fork();
+    
+    ret = shell_is_builtin(args[0]);
 
     strncpy(path, "/usr/bin/", 10);
     strncat(path, args[0], strlen(args[0]));
 
     if (pid == 0) {
         /* child process */
-        ret = execve(path, args, NULL);
+        if (ret != -1)
+            shell_exec_builtin(ret, args);
+        else {
+            ret = execve(path, args, NULL);
 
-        if (ret == -1)
-            printf("shell: %s: command not found\n", args[0]);
-        
+            if (ret == -1)
+                printf("shell: %s: command not found\n", args[0]);    
+        }
+
         exit(EXIT_FAILURE);
     }
     else if (pid < 0) {

@@ -17,40 +17,40 @@
  */
 
 /**
- * @file  shell.h
- * @brief Provides definitions & functions used in shell. 
+ * @file  builtins.h
+ * @brief Provides shell builtin commands. 
  * 
  * @author Alexander Kuzin (<a href="https://github.com/alkuzin">alkuzin</a>)
- * @date   14.07.2024
+ * @date   15.07.2024
  */
 
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#ifndef _SHELL_BUILTINS_H_
+#define _SHELL_BUILTINS_H_
 
 #include <stdint.h>
 
-#define SHELL_TOK_DELIM      " \n\t\r"
-#define SHELL_INPUT_BUFSIZE  256
-#define SHELL_TOK_BUFSIZE    64
-#define SHELL_PROMPT_BUFSIZE 256
-
-/** @brief Initialize shell. */
-void shell_init(void);
+/**
+ * @brief Check command is builtin.
+ * 
+ * @param [in] cmd - given command.
+ * @return builtin command ID - if @a cmd is builtin.
+ * @return -1 - otherwise.
+ */
+int32_t shell_is_builtin(char *cmd);
 
 /**
- * @brief Split user input. 
+ * @brief Execute shell builtin command.
  * 
- * @param [in] buffer - given user input.
- * @return separated tokens list.
+ * @param [in] cmd - given builtin command ID.
+ * @param [in] args -given list of arguments.
  */
-char **shell_split(char *buffer);
+void shell_exec_builtin(int32_t id, char **args);
 
 /**
- * @brief Execute shell command.
+ * @brief Shell echo builtin commands. 
  * 
- * @param [in] args - given separated tokens list.
- * @return zero in case of success.
+ * @param [in] args - given command arguments list.
  */
-int32_t shell_exec(char **args);
+void shell_echo(char **args);
 
-#endif /* _SHELL_H_ */
+#endif /* _SHELL_BUILTINS_H_ */

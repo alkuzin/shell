@@ -3,7 +3,7 @@ CC     		= gcc
 CFLAGS 		= -Wall -Wextra -Werror -g -I $(INCLUDE_DIR)
 
 NAME = shell
-SRC  = shell utils
+SRC  = shell utils builtins
 SRCS = $(addsuffix .c, $(SRC))
 OBJS = $(addsuffix .o, $(SRC))
 
