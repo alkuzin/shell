@@ -60,4 +60,11 @@ void shell_echo(char **args);
  */
 void shell_pwd(char **args);
 
+/**
+ * @brief Shell print enviroment variables.
+ * 
+ * @param [in] args - given command arguments list.
+ */
+void shell_export(char **args);
+
 #endif /* _SHELL_BUILTINS_H_ */

@@ -38,13 +38,15 @@ static size_t shell_builtins_size(void);
 /** @brief List of shell builtin commands functions pointers. */
 static void (*shell_builtins[]) = {
     &shell_echo,
-    &shell_pwd
+    &shell_pwd,
+    &shell_export
 };
 
 /** @brief List of shell builtin commands names. */
 static char *shell_builtins_names[] = {
     "echo",
-    "pwd"
+    "pwd",
+    "export"
 };
 
 
@@ -79,7 +81,7 @@ void shell_echo(char **args)
 {
     int32_t argc, is_n_opt, i;
 
-    argc     = getargc(args);
+    argc     = shell_getargc(args);
     is_n_opt = 0;
     i        = 1;
 
@@ -110,4 +112,46 @@ void shell_pwd(char **args)
         perror("shell: pwd");
         exit(EXIT_FAILURE);
     }
+}
+
+void shell_export(char **args)
+{
+    char    **env, **env_sorted, *ptr;
+    int32_t count;
+    (void)  args;
+
+    env   = environ;
+    count = 0;
+
+    while (*env) {
+        count++;
+        env++;
+    }
+
+    env_sorted = (char **)malloc(count * sizeof(char *));
+
+    if (!env_sorted) {
+        perror("shell: export: allocation error");
+        exit(EXIT_FAILURE);
+    }
+
+    env = environ;
+
+    for (int32_t i = 0; i < count; i++) {
+        env_sorted[i] = *env;
+        env++;
+    }
+
+    qsort(env_sorted, count, sizeof(char *), shell_cmpstr);
+
+    for (int32_t i = 0; i < count; i++) {
+        ptr = strchr(env_sorted[i], '=');
+
+        if (ptr) {
+            *ptr = '\0';
+            printf("declare -x %s=\"%s\"\n", env_sorted[i], ptr + 1);
+        }
+    }
+
+    free(env_sorted);
 }
