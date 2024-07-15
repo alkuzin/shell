@@ -16,8 +16,8 @@
  * <https://www.gnu.org/licenses/>.
  */
 
-#include <shell/utils.h>
 #include <stdio.h>
+#include <shell/utils.h>
 
 
 void getinput(char *input, size_t size)
@@ -39,4 +39,16 @@ void getinput(char *input, size_t size)
                 continue;
         }
     }
+}
+
+int32_t getargc(char **args)
+{
+	int32_t i;
+
+	i = 0;
+	
+	while (args[i])
+		i++;
+	
+	return i;
 }

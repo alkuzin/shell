@@ -16,6 +16,14 @@
  * <https://www.gnu.org/licenses/>.
  */
 
+/**
+ * @file  utils.h
+ * @brief Provides auxilar functions used in shell. 
+ * 
+ * @author Alexander Kuzin (<a href="https://github.com/alkuzin">alkuzin</a>)
+ * @date   14.07.2024
+ */
+
 #ifndef _SHELL_UTILS_H_
 #define _SHELL_UTILS_H_
 
@@ -29,5 +37,13 @@
  * @param [in] size - given max size of the input to store.
  */
 void getinput(char *input, size_t size);
+
+/**
+ * @brief Get number of shell command arguments. 
+ * 
+ * @param [in] args - given shell arguments list.
+ * @return number of arguments.
+ */
+int32_t getargc(char **args);
 
 #endif /* _SHELL_UTILS_H_ */
