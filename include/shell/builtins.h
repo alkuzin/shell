@@ -53,4 +53,11 @@ void shell_exec_builtin(int32_t id, char **args);
  */
 void shell_echo(char **args);
 
+/**
+ * @brief Shell print current working directory.
+ * 
+ * @param [in] args - given command arguments list.
+ */
+void shell_pwd(char **args);
+
 #endif /* _SHELL_BUILTINS_H_ */

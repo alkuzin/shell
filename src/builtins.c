@@ -16,22 +16,54 @@
  * <https://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
 #include <string.h>
+#include <limits.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
+#include <pwd.h>
 
 #include <shell/builtins.h>
 #include <shell/utils.h>
+#include <shell/shell.h>
 
+/**
+ * @brief Get number of builtin commands.
+ * 
+ * @return total number of builtin commands.
+ */
+static size_t shell_builtins_size(void);
+
+/** @brief List of shell builtin commands functions pointers. */
 static void (*shell_builtins[]) = {
-    &shell_echo
+    &shell_echo,
+    &shell_pwd
+};
+
+/** @brief List of shell builtin commands names. */
+static char *shell_builtins_names[] = {
+    "echo",
+    "pwd"
 };
 
 
+static size_t shell_builtins_size(void)
+{
+    return (sizeof(shell_builtins_names) / sizeof(char *));
+}
+
 int32_t shell_is_builtin(char *cmd)
 {
-    if (strncmp("echo", cmd, 4) == 0)
-        return 0;
-    
+    char *builtin;
+
+    for (size_t i = 0; i < shell_builtins_size(); i++) {
+        builtin = shell_builtins_names[i];
+        
+        if (strncmp(builtin, cmd, strlen(builtin)) == 0)
+            return i;
+    }
+
     return -1;
 }
 
@@ -64,5 +96,18 @@ void shell_echo(char **args)
         
         if (!is_n_opt)
             putchar('\n');
+    }
+}
+
+void shell_pwd(char **args)
+{
+    char cwd[1024];
+    (void) args;
+
+    if (getcwd(cwd, sizeof(cwd)))
+        puts(cwd);
+    else {
+        perror("shell: pwd");
+        exit(EXIT_FAILURE);
     }
 }
