@@ -139,17 +139,17 @@ int32_t shell_exec(char **args)
     pid_t   pid, wpid;
 
     pid = fork();
-    
-    ret = shell_is_builtin(args[0]);
-
-    strncpy(path, "/usr/bin/", 10);
-    strncat(path, args[0], strlen(args[0]));
 
     if (pid == 0) {
+        ret = shell_is_builtin(args[0]);
+        
         /* child process */
         if (ret != -1)
             shell_exec_builtin(ret, args);
         else {
+            strncpy(path, "/usr/bin/", 10);
+            strncat(path, args[0], strlen(args[0]));
+
             ret = execve(path, args, NULL);
 
             if (ret == -1)

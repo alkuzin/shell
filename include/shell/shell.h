@@ -29,7 +29,7 @@
 
 #include <stdint.h>
 
-#define SHELL_TOK_DELIM      " \n\t\r"
+#define SHELL_TOK_DELIM      " \n\t\r\"\'"
 #define SHELL_INPUT_BUFSIZE  256
 #define SHELL_TOK_BUFSIZE    64
 #define SHELL_PROMPT_BUFSIZE 256
