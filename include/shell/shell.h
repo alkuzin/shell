@@ -34,6 +34,8 @@
 #define SHELL_TOK_BUFSIZE    64
 #define SHELL_PROMPT_BUFSIZE 256
 
+extern char **environ;
+
 /** @brief Initialize shell. */
 void shell_init(void);
 

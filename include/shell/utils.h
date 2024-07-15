@@ -36,7 +36,7 @@
  * @param [out] input - given buffer to store user input.
  * @param [in] size - given max size of the input to store.
  */
-void getinput(char *input, size_t size);
+void shell_getinput(char *input, size_t size);
 
 /**
  * @brief Get number of shell command arguments. 
@@ -44,6 +44,18 @@ void getinput(char *input, size_t size);
  * @param [in] args - given shell arguments list.
  * @return number of arguments.
  */
-int32_t getargc(char **args);
+int32_t shell_getargc(char **args);
+
+/**
+ * @brief Compares two strings pointed to by the given pointers. 
+ * 
+ * @param [in] p1 - given pointer to the first string to compare.
+ * @param [in] p2 - given pointer to the second string to compare.
+ * 
+ * @return a positive value if @a p1 is greater  @a p2.
+ * @return 0, if @a p1 equals @a p2.
+ * @return a negative if @a p1 is less than @a p2.
+ */
+int32_t shell_cmpstr(const void *p1, const void *p2);
 
 #endif /* _SHELL_UTILS_H_ */

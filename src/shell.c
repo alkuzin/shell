@@ -81,7 +81,7 @@ void shell_init(void)
 
     do {
         printf("%s:%s> ", shell_prompt, shell_cwd);
-        getinput(buffer, SHELL_INPUT_BUFSIZE);
+        shell_getinput(buffer, SHELL_INPUT_BUFSIZE);
 
         args = shell_split(buffer);
 

@@ -16,11 +16,13 @@
  * <https://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
 #include <stdio.h>
+
 #include <shell/utils.h>
 
 
-void getinput(char *input, size_t size)
+void shell_getinput(char *input, size_t size)
 {
 	uint32_t i;
 
@@ -41,7 +43,7 @@ void getinput(char *input, size_t size)
     }
 }
 
-int32_t getargc(char **args)
+int32_t shell_getargc(char **args)
 {
 	int32_t i;
 
@@ -51,4 +53,14 @@ int32_t getargc(char **args)
 		i++;
 	
 	return i;
+}
+
+int32_t shell_cmpstr(const void *p1, const void *p2)
+{
+    char *s1, *s2;
+
+    s1 = *(char **)p1;
+    s2 = *(char **)p2;
+    
+    return strcmp(s1, s2);
 }
