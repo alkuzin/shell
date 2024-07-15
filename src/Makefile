@@ -1,28 +1,27 @@
-INCLUDE_DIR = ../include/
-CC     		= gcc
-CFLAGS 		= -Wall -Wextra -Werror -g -I $(INCLUDE_DIR)
+include common.mk
 
-NAME = shell
+INCLUDE_DIR  = ../include/
+BUILTINS_DIR = builtins/
+SHELL_DIR    = shell/
+
+NAME = sh
 SRC  = shell utils builtins
-SRCS = $(addsuffix .c, $(SRC))
-OBJS = $(addsuffix .o, $(SRC))
 
-OBJS_DIR      = objs/
-OBJS_PREFIXED = $(addprefix $(OBJS_DIR), $(OBJS))
+OBJS_PREFIXED = $(BUILTINS_DIR)shell_builtins.o $(SHELL_DIR)shell_main.o
 
-$(OBJS_PREFIXED): $(SRCS)
-	mkdir -p $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $(SRCS)
-	mv *.o $(OBJS_DIR)
+$(OBJS_PREFIXED):
+	$(MAKE) -C $(SHELL_DIR) all
+	$(MAKE) -C $(BUILTINS_DIR) all
 
 $(NAME): $(OBJS_PREFIXED)
-	$(CC) $(CFLAGS) $(OBJS_PREFIXED) main.c -o $(NAME)
+	$(CC) $(CFLAGS) -I $(INCLUDE_DIR) $(OBJS_PREFIXED) main.c -o $(NAME)
 
 all: $(NAME)
 	mv $(NAME) ../
 
 clean:
-	rm -rf $(OBJS_DIR)
+	$(MAKE) -C $(SHELL_DIR) fclean
+	$(MAKE) -C $(BUILTINS_DIR) fclean
 
 fclean: clean
 	rm -f ../$(NAME)
