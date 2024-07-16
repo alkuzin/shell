@@ -23,6 +23,7 @@
 #include <string.h>
 #include <signal.h>
 #include <stdio.h>
+#include <errno.h>
 #include <pwd.h>
 
 #include <shell/builtins.h>
@@ -31,12 +32,36 @@
 
 static char shell_prompt[SHELL_PROMPT_BUFSIZE];
 static char shell_cwd[PATH_MAX];
+int32_t pipefd[2];
 
 
 static void exit_handler(int32_t sig)
 {
     (void) sig;
     exit(EXIT_SUCCESS);
+}
+
+static void cd_handler(int32_t sig)
+{
+    int32_t ret;
+    (void) sig;
+
+    close(pipefd[1]);
+    ret = read(pipefd[0], shell_cwd, sizeof(shell_cwd));
+
+    if (ret == -1) {
+        perror("shell: cd_handler");
+        exit(EXIT_FAILURE);
+    }
+
+    close(pipefd[0]);
+
+    ret = chdir(shell_cwd);
+
+    if (ret == -1) {
+        printf("shell: cd: %s: %s\n", shell_cwd, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
 }
 
 static void shell_set_prompt(void)
@@ -152,6 +177,13 @@ int32_t shell_exec(char **args)
     int32_t status, ret;
     pid_t   pid, wpid;
 
+    ret = pipe(pipefd);
+
+    if (ret == -1) {
+        perror("shell: pipe");
+        exit(EXIT_FAILURE);
+    }
+
     pid = fork();
 
     if (pid == 0) {
@@ -179,6 +211,8 @@ int32_t shell_exec(char **args)
     else {
         /* parent process */
         signal(SIGUSR1, exit_handler);
+        signal(SIGUSR2, cd_handler);
+
 
         do {
             wpid = waitpid(pid, &status, WUNTRACED);

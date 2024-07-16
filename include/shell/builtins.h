@@ -74,4 +74,11 @@ void shell_export(char **args);
  */
 void shell_exit(char **args);
 
+/**
+ * @brief Change current working directory.
+ * 
+ * @param [in] args - given command arguments list.
+ */
+void shell_cd(char **args);
+
 #endif /* _SHELL_BUILTINS_H_ */

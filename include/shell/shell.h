@@ -35,6 +35,7 @@
 #define SHELL_PROMPT_BUFSIZE 256
 
 extern char **environ;
+extern int32_t pipefd[2];
 
 /** @brief Initialize shell. */
 void shell_init(void);
