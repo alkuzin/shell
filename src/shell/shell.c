@@ -81,8 +81,8 @@ static void shell_set_prompt(void)
 void shell_init(void)
 {
     char    buffer[SHELL_INPUT_BUFSIZE];
-    char    **args;
-    int32_t status;
+    char    **commands, **args;
+    int32_t status, argc;
 
     shell_set_prompt();
 
@@ -90,14 +90,21 @@ void shell_init(void)
         printf("%s:%s> ", shell_prompt, shell_cwd);
         shell_getinput(buffer, SHELL_INPUT_BUFSIZE);
 
-        args = shell_split(buffer, SHELL_TOK_DELIM);
+        commands = shell_split(buffer, ";");
+        argc     = shell_getargc(commands);
+        status   = 1;
 
-        if (!args[0])
-            continue; 
+        for (int32_t i = 0; i < argc; i++) {
+            args = shell_split(commands[i], SHELL_TOK_DELIM);
 
-        status = shell_exec(args);
+            if (!args[0])
+                continue;
 
-        free(args);
+            status = shell_exec(args);
+            free(args);
+        }
+
+        free(commands);
 
     } while (status);
 }
@@ -118,7 +125,7 @@ char **shell_split(char *buffer, char *delim)
     
     token = strtok(buffer, delim);
 
-    while (token != NULL) {
+    while (token) {
         tokens[pos] = token;
         pos++;
         
@@ -132,7 +139,7 @@ char **shell_split(char *buffer, char *delim)
             }    
         }
         
-        token = strtok(NULL, SHELL_TOK_DELIM);
+        token = strtok(NULL, delim);
     }
     
     tokens[pos] = NULL;
