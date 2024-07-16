@@ -67,4 +67,11 @@ void shell_pwd(char **args);
  */
 void shell_export(char **args);
 
+/**
+ * @brief Exit shell.
+ * 
+ * @param [in] args - given command arguments list.
+ */
+void shell_exit(char **args);
+
 #endif /* _SHELL_BUILTINS_H_ */

@@ -21,6 +21,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <signal.h>
 #include <stdio.h>
 #include <pwd.h>
 
@@ -31,6 +32,12 @@
 static char shell_prompt[SHELL_PROMPT_BUFSIZE];
 static char shell_cwd[PATH_MAX];
 
+
+static void exit_handler(int32_t sig)
+{
+    (void) sig;
+    exit(EXIT_SUCCESS);
+}
 
 static void shell_set_prompt(void)
 {
@@ -141,9 +148,9 @@ int32_t shell_exec(char **args)
     pid = fork();
 
     if (pid == 0) {
+        /* child process */
         ret = shell_is_builtin(args[0]);
         
-        /* child process */
         if (ret != -1)
             shell_exec_builtin(ret, args);
         else {
@@ -164,11 +171,13 @@ int32_t shell_exec(char **args)
     }
     else {
         /* parent process */
+        signal(SIGUSR1, exit_handler);
+
         do {
             wpid = waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
         
-        (void)wpid;
+        (void) wpid;
     }
 
     return 1;

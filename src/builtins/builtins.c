@@ -39,14 +39,16 @@ static size_t shell_builtins_size(void);
 static void (*shell_builtins[]) = {
     &shell_echo,
     &shell_pwd,
-    &shell_export
+    &shell_export,
+    &shell_exit
 };
 
 /** @brief List of shell builtin commands names. */
 static char *shell_builtins_names[] = {
     "echo",
     "pwd",
-    "export"
+    "export",
+    "exit"
 };
 
 

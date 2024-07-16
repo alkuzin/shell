@@ -2,7 +2,7 @@ include ../common.mk
 
 NAME = shell_builtins.o
 
-SRC  = builtins echo export pwd
+SRC  = builtins echo export pwd exit
 SRCS = $(addsuffix .c, $(SRC))
 OBJS = $(addsuffix .o, $(SRC))
 
