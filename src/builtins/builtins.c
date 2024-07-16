@@ -41,7 +41,8 @@ static void (*shell_builtins[]) = {
     &shell_pwd,
     &shell_export,
     &shell_exit,
-    &shell_cd
+    &shell_cd,
+    &shell_clear
 };
 
 /** @brief List of shell builtin commands names. */
@@ -50,7 +51,8 @@ static char *shell_builtins_names[] = {
     "pwd",
     "export",
     "exit",
-    "cd"
+    "cd",
+    "clear"
 };
 
 

@@ -210,9 +210,11 @@ int32_t shell_exec(char **args)
     }
     else {
         /* parent process */
+        /* handle signal from exit builtin command */
         signal(SIGUSR1, exit_handler);
+        
+        /* handle signal from cd builtin command */
         signal(SIGUSR2, cd_handler);
-
 
         do {
             wpid = waitpid(pid, &status, WUNTRACED);
@@ -222,9 +224,4 @@ int32_t shell_exec(char **args)
     }
 
     return 1;
-}
-
-void shell_set_cwd(char *path)
-{
-    strncpy(shell_cwd, path, PATH_MAX - 1);
 }

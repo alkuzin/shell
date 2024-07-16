@@ -81,4 +81,11 @@ void shell_exit(char **args);
  */
 void shell_cd(char **args);
 
+/**
+ * @brief Clear screen.
+ * 
+ * @param [in] args - given command arguments list.
+ */
+void shell_clear(char **args);
+
 #endif /* _SHELL_BUILTINS_H_ */
