@@ -43,9 +43,10 @@ void shell_init(void);
  * @brief Split user input. 
  * 
  * @param [in] buffer - given user input.
+ * @param [in] delim - given set of delimeters.
  * @return separated tokens list.
  */
-char **shell_split(char *buffer);
+char **shell_split(char *buffer, char *delim);
 
 /**
  * @brief Execute shell command.

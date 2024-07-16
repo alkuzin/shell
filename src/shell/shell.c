@@ -90,7 +90,7 @@ void shell_init(void)
         printf("%s:%s> ", shell_prompt, shell_cwd);
         shell_getinput(buffer, SHELL_INPUT_BUFSIZE);
 
-        args = shell_split(buffer);
+        args = shell_split(buffer, SHELL_TOK_DELIM);
 
         if (!args[0])
             continue; 
@@ -102,7 +102,7 @@ void shell_init(void)
     } while (status);
 }
 
-char **shell_split(char *buffer)
+char **shell_split(char *buffer, char *delim)
 {
     char    **tokens, *token;
     int32_t size, pos;
@@ -116,7 +116,7 @@ char **shell_split(char *buffer)
         exit(EXIT_FAILURE);
     }
     
-    token = strtok(buffer, SHELL_TOK_DELIM);
+    token = strtok(buffer, delim);
 
     while (token != NULL) {
         tokens[pos] = token;
